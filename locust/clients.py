@@ -7,6 +7,7 @@ from requests import Request, Response
 from requests.auth import HTTPBasicAuth
 from requests.exceptions import (InvalidSchema, InvalidURL, MissingSchema,
                                  RequestException)
+from hyper.contrib import HTTP20Adapter
 
 from six.moves.urllib.parse import urlparse, urlunparse
 
@@ -49,6 +50,8 @@ class HttpSession(requests.Session):
     """
     def __init__(self, base_url, *args, **kwargs):
         super(HttpSession, self).__init__(*args, **kwargs)
+
+        self.mount('https://', HTTP20Adapter())
 
         self.base_url = base_url
         
