@@ -109,8 +109,8 @@ $(".stats_label").click(function(event) {
     $('#stats tbody').empty();
     $('#errors tbody').empty();
     alternate = false;
-    totalRow = report.stats.pop();
-    sortedStats = (report.stats).sort(sortBy(sortAttribute, desc));
+    var totalRow = report.stats.pop();
+    var sortedStats = (report.stats).sort(sortBy(sortAttribute, desc));
     sortedStats.push(totalRow);
     $('#stats tbody').jqoteapp(stats_tpl, sortedStats);
     alternate = false;
@@ -131,7 +131,7 @@ function updateStats() {
         $("#userCount").html(report.user_count);
 
         if (report.slaves) {
-            slaves = (report.slaves).sort(sortBy(slaveSortAttribute, desc));
+            var slaves = (report.slaves).sort(sortBy(slaveSortAttribute, desc));
             $("#slaves tbody").empty();
             $("#slaves tbody").jqoteapp(slaves_tpl, slaves);
             $("#slaveCount").html(slaves.length);
@@ -142,21 +142,16 @@ function updateStats() {
 
         alternate = false;
 
-        totalRow = report.stats.pop();
-        sortedStats = (report.stats).sort(sortBy(sortAttribute, desc));
+        var totalRow = report.stats.pop();
+        var sortedStats = (report.stats).sort(sortBy(sortAttribute, desc));
         sortedStats.push(totalRow);
         $('#stats tbody').jqoteapp(stats_tpl, sortedStats);
         alternate = false;
         $('#errors tbody').jqoteapp(errors_tpl, (report.errors).sort(sortBy(sortAttribute, desc)));
 
-        if (report.state !== "stopped"){
-            // get total stats row
-            var total = report.stats[report.stats.length-1];
-            // update charts
-            rpsChart.addValue([total.current_rps]);
-            responseTimeChart.addValue([report.current_response_time_percentile_50, report.current_response_time_percentile_95]);
-            usersChart.addValue([report.user_count]);
-        }
+        rpsChart.addValue([report.total_rps]);
+        responseTimeChart.addValue([report.current_response_time_percentile_50, report.current_response_time_percentile_95]);
+        usersChart.addValue([report.user_count]);
 
         setTimeout(updateStats, 2000);
     });
